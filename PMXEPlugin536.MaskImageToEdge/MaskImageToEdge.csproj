@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net40</TargetFramework>
+		<OutputType>Library</OutputType>
+		<UseWindowsForms>true</UseWindowsForms>
+		<Platforms>AnyCPU;x64</Platforms>
+		<OutputPath>bin\Release\</OutputPath>
+	</PropertyGroup>
+	<ItemGroup>
+		<Reference Include="PEPlugin">
+			<HintPath>$(SolutionDir)\Libs\PEPlugin.dll</HintPath>
+		</Reference>
+		<Reference Include="SlimDX">
+			<HintPath>$(SolutionDir)\Libs\SlimDX.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+</Project>

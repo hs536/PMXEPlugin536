@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31702.278
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaskImageToEdge", "PMXEPlugin536.MaskImageToEdge\MaskImageToEdge.csproj", "{146B94E2-62B3-4EA3-B064-03F576B1A94F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DA698ABB-F303-4A1F-8C91-A3265B5F2763}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{146B94E2-62B3-4EA3-B064-03F576B1A94F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{146B94E2-62B3-4EA3-B064-03F576B1A94F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{146B94E2-62B3-4EA3-B064-03F576B1A94F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{146B94E2-62B3-4EA3-B064-03F576B1A94F}.Debug|x64.Build.0 = Debug|Any CPU
+		{146B94E2-62B3-4EA3-B064-03F576B1A94F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{146B94E2-62B3-4EA3-B064-03F576B1A94F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{146B94E2-62B3-4EA3-B064-03F576B1A94F}.Release|x64.ActiveCfg = Release|Any CPU
+		{146B94E2-62B3-4EA3-B064-03F576B1A94F}.Release|x64.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0D3A5C44-0B32-45DE-9C04-1D022590CF34}
+	EndGlobalSection
+EndGlobal
