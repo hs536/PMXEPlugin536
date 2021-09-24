@@ -17,8 +17,6 @@ namespace PMXEPlugin536.MaskImageToEdge {
 
         public override void Run(IPERunArgs args) {
             try {
-                var pmx = args.Host.Connector.Pmx;
-
                 // make sure a material is selected
                 int materialIndex = args.Host.Connector.Form.SelectedMaterialIndex;
                 if (materialIndex == -1) {
@@ -26,34 +24,28 @@ namespace PMXEPlugin536.MaskImageToEdge {
                     return;
                 }
 
-                // create candidate vertex list
-                var vertexSet = new HashSet<ComparableVertex>();
-                var faces = args.Host.Connector.Pmx.GetCurrentState().Material[materialIndex].Faces;
-                foreach (var face in faces) {
-                    vertexSet.Add(new ComparableVertex(face.Vertex1.Position.X, face.Vertex1.Position.Y, face.Vertex1.Position.Z));
-                    vertexSet.Add(new ComparableVertex(face.Vertex2.Position.X, face.Vertex2.Position.Y, face.Vertex2.Position.Z));
-                    vertexSet.Add(new ComparableVertex(face.Vertex3.Position.X, face.Vertex3.Position.Y, face.Vertex3.Position.Z));
-                }
-
-                // backup model file
-                var modelFilePath = pmx.CurrentPath;
-                if (modelFilePath.Length != 0) {
-                    backupModelFile(modelFilePath);
-                }
-
-                // load image
+                // load mask image
                 var bitmap = getImageBitmap();
                 if (bitmap == null) {
                     MessageBox.Show("Please select image file.");
                     return;
                 }
 
-                // overwrite vertex
-                var currentPmxData = pmx.GetCurrentState();
-                var vertexList = currentPmxData.Vertex;
-                foreach (var vertex in vertexList) {
-                    var comparableVertex = new ComparableVertex(vertex.Position.X, vertex.Position.Y, vertex.Position.Z);
-                    if (!vertexSet.Contains(comparableVertex)) {
+                // prepare editing candidate vertexes list
+                // NOTE: PEPlugin does not provide API for mapping vertex number to material
+                var targetPositionSet = new HashSet<VertexPosition>();
+                var faces = args.Host.Connector.Pmx.GetCurrentState().Material[materialIndex].Faces;
+                foreach (var face in faces) {
+                    targetPositionSet.Add(new VertexPosition(face.Vertex1.Position.X, face.Vertex1.Position.Y, face.Vertex1.Position.Z));
+                    targetPositionSet.Add(new VertexPosition(face.Vertex2.Position.X, face.Vertex2.Position.Y, face.Vertex2.Position.Z));
+                    targetPositionSet.Add(new VertexPosition(face.Vertex3.Position.X, face.Vertex3.Position.Y, face.Vertex3.Position.Z));
+                }
+
+                // overwrite vertex edge scale
+                var currentPmxData = args.Host.Connector.Pmx.GetCurrentState();
+                foreach (var vertex in currentPmxData.Vertex) {
+                    var vertexPosition = new VertexPosition(vertex.Position.X, vertex.Position.Y, vertex.Position.Z);
+                    if (!targetPositionSet.Contains(vertexPosition)) {
                         continue;
                     }
                     var uv = vertex.UV;
@@ -63,8 +55,14 @@ namespace PMXEPlugin536.MaskImageToEdge {
                     vertex.EdgeScale = convertRGBtoLuma(pixel.R, pixel.G, pixel.B);
                 }
 
+                // backup pmx file if already exists
+                var modelFilePath = args.Host.Connector.Pmx.CurrentPath;
+                if (modelFilePath.Length != 0) {
+                    backupModelFile(modelFilePath);
+                }
+
                 // Update Pmx and View
-                pmx.Update(currentPmxData);
+                args.Host.Connector.Pmx.Update(currentPmxData);
                 args.Host.Connector.View.PmxView.UpdateModel();
 
                 MessageBox.Show("done.");
@@ -105,19 +103,19 @@ namespace PMXEPlugin536.MaskImageToEdge {
             return simplified_val;
         }
 
-        private class ComparableVertex {
+        private class VertexPosition {
             float X { get; set; }
             float Y { get; set; }
             float Z { get; set; }
 
-            public ComparableVertex(float X, float Y, float Z) {
+            public VertexPosition(float X, float Y, float Z) {
                 this.X = X;
                 this.Y = Y;
                 this.Z = Z;
             }
 
             public override bool Equals(object obj) {
-                ComparableVertex target = (ComparableVertex)obj;
+                VertexPosition target = (VertexPosition)obj;
                 return (this.X == target.X && this.Y == target.Y && this.Z == target.Z);
             }
 
