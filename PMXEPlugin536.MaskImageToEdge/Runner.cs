@@ -49,8 +49,8 @@ namespace PMXEPlugin536.MaskImageToEdge {
                         continue;
                     }
                     var uv = vertex.UV;
-                    int x = (int)Math.Round(uv.U * (bitmap.Width - 1), 0);
-                    int y = (int)Math.Round(uv.V * (bitmap.Height - 1), 0);
+                    int x = (int)Math.Round(normalize(uv.U) * (bitmap.Width - 1), 0);
+                    int y = (int)Math.Round(normalize(uv.V) * (bitmap.Height - 1), 0);
                     var pixel = bitmap.GetPixel(x, y);
                     vertex.EdgeScale = convertRGBtoLuma(pixel.R, pixel.G, pixel.B);
                 }
@@ -69,6 +69,10 @@ namespace PMXEPlugin536.MaskImageToEdge {
             } catch (Exception ex) {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
+        }
+
+        private static float normalize(float value) {
+            return value - (float)Math.Floor(value);
         }
 
         private static void backupModelFile(String filepath,
